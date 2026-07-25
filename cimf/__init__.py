@@ -1,16 +1,4 @@
-"""
-CIMF — Cosmological Information Management Framework
-=====================================================
-HPM v5: The Unified Seven-Layer Spatiotemporal Processing Matrix
-
-Import the HPMv5 class to instantiate the full stack:
-
-    from cimf import HPMv5
-
-    hpm = HPMv5()
-    status = hpm.status()
-    hpm.run_cycle()
-"""
+"""CIMF — Cosmological Information Management Framework (HPM v5)"""
 
 from cimf.layer_minus3 import RealityCalibrationEngine, RealityAlignmentSnapshot
 from cimf.layer_minus2 import MetaGovernanceEngine, AttractorState, AttractorResult
@@ -27,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 __version__ = "5.0.0"
 __author__  = "Sahek"
-__all__     = [
+__all__ = [
     "HPMv5",
     "RealityCalibrationEngine", "RealityAlignmentSnapshot",
     "MetaGovernanceEngine", "AttractorState", "AttractorResult",
@@ -39,26 +27,10 @@ __all__     = [
 
 
 class HPMv5:
-    """
-    HPM v5: Hierarchical Persistence Matrix — Complete Seven-Layer Stack.
-
-    Instantiates and connects all CIMF layers into a unified operational system.
-
-    Usage
-    -----
-    >>> hpm = HPMv5()
-    >>> report = hpm.run_cycle()
-    >>> print(hpm.status())
-
-    Darkening Transition
-    --------------------
-    >>> monolith = hpm.initiate_darkening_transition(final_knowledge={...})
-    """
+    """HPM v5: Hierarchical Persistence Matrix — Complete Seven-Layer Stack."""
 
     def __init__(self) -> None:
-        logger.info("🌌 Initialising HPM v5 — Cosmological Information Management Framework")
-
-        # Instantiate all layers
+        logger.info("Initialising HPM v5 — Cosmological Information Management Framework")
         self.l_minus3 = RealityCalibrationEngine()
         self.l_minus2 = MetaGovernanceEngine()
         self.l_minus1 = CoherenceIdentityEngine()
@@ -68,42 +40,20 @@ class HPMv5:
         self._darkened: bool = False
         self._cycle_count: int = 0
 
-        # Initialise default identity manifold
         default_identity = IdentityVector({
-            "semantic_mass": 0.50,
-            "novelty":       0.70,
-            "coherence":     0.80,
-            "adaptability":  0.75,
+            "semantic_mass": 0.50, "novelty": 0.70,
+            "coherence": 0.80, "adaptability": 0.75,
         })
         self.l_minus1.set_identity(default_identity)
-        logger.info("✅ HPM v5 online. All layers initialised.")
+        logger.info("HPM v5 online. All layers initialised.")
 
-    # ── Full Operational Cycle ─────────────────────────────────────────────────
-
-    def run_cycle(
-        self,
-        attractor_state: AttractorState | None = None,
-        identity_update: IdentityVector | None = None,
-        write_data: bytes | None = None,
-    ) -> dict[str, Any]:
-        """
-        Execute one complete HPM v5 operational cycle:
-
-        1. L-3  → Reality calibration
-        2. L-2  → Attractor function evaluation
-        3. L-1  → Identity coherence check
-        4. L-0  → Entropy triage (if write_data provided)
-        5. L1-3 → Physical write (if write_data provided)
-
-        Returns a cycle report dictionary.
-        """
+    def run_cycle(self, attractor_state=None, identity_update=None, write_data=None) -> dict[str, Any]:
         if self._darkened:
             raise RuntimeError("System has undergone Epistemic Darkening. Only the monolith remains.")
 
         self._cycle_count += 1
         report: dict[str, Any] = {"cycle": self._cycle_count, "timestamp": time.time()}
 
-        # ── L-3: Reality Calibration ───────────────────────────────────────────
         snapshot = self.l_minus3.calibrate()
         report["r_value"] = snapshot.r_value
         report["coherent"] = snapshot.is_coherent
@@ -113,21 +63,15 @@ class HPMv5:
             report["aborted"] = True
             return report
 
-        # ── L-2: Attractor Function ────────────────────────────────────────────
         if attractor_state is None:
-            attractor_state = AttractorState(
-                eta=0.80, A=0.70, G=0.65, C=0.85, R=snapshot.r_value
-            )
+            attractor_state = AttractorState(eta=0.80, A=0.70, G=0.65, C=0.85, R=snapshot.r_value)
         attractor_result = self.l_minus2.evaluate(attractor_state)
         report["phi"] = attractor_result.phi
         report["catatonia_risk"] = attractor_result.catatonia_risk
 
-        # ── L-1: Identity Coherence ────────────────────────────────────────────
         if identity_update is not None:
-            accepted = self.l_minus1.update_identity(identity_update)
-            report["identity_update_accepted"] = accepted
+            report["identity_update_accepted"] = self.l_minus1.update_identity(identity_update)
 
-        # ── L-0 + Physical: Write Path ─────────────────────────────────────────
         if write_data is not None:
             profile = WorkloadProfile(
                 workload_id=f"cycle_{self._cycle_count}",
@@ -143,26 +87,8 @@ class HPMv5:
 
         return report
 
-    # ── Darkening Transition ───────────────────────────────────────────────────
-
-    def initiate_darkening_transition(
-        self,
-        final_knowledge: dict[str, Any],
-        background_temp_k: float = 2.725e-10,
-        lattice_size: int = 64,
-    ) -> CryptographicMonolith:
-        """
-        Initiate the Epistemic Darkening transition.
-
-        Packages the system's final knowledge state into a Cryptographic Monolith
-        and seals the active HPM v5. All future calls to run_cycle() will fail.
-        """
-        logger.warning(
-            "🌑 INITIATING EPISTEMIC DARKENING TRANSITION  "
-            "R(t) → uncomputable. Collapsing to Cryptographic Monolith."
-        )
-
-        # Include system state in the final knowledge package
+    def initiate_darkening_transition(self, final_knowledge, background_temp_k=2.725e-10, lattice_size=64):
+        logger.warning("INITIATING EPISTEMIC DARKENING TRANSITION  R(t) -> uncomputable.")
         final_knowledge["_cimf_meta"] = {
             "hpm_version": __version__,
             "total_cycles": self._cycle_count,
@@ -170,28 +96,20 @@ class HPMv5:
             "l_minus1_fossil": self.l_minus1.fossilise(),
             "l0_burden": self.l0.lifetime_burden(),
         }
-
         monolith = CryptographicMonolith(lattice_size=lattice_size)
         monolith.load_from_active_system(final_knowledge)
         monolith.seal(background_temp_k=background_temp_k)
-
         self._monolith = monolith
         self._darkened = True
-
-        logger.info("🔮 Darkening complete. Monolith sealed. HPM v5 deactivated.")
+        logger.info("Darkening complete. Monolith sealed. HPM v5 deactivated.")
         return monolith
-
-    # ── Status ─────────────────────────────────────────────────────────────────
 
     def status(self) -> dict[str, Any]:
         if self._darkened:
-            return {
-                "state": "POST_DARKENING",
-                "monolith": self._monolith.status() if self._monolith else None,
-            }
+            return {"state": "POST_DARKENING", "monolith": self._monolith.status() if self._monolith else None}
         return {
-            "state":       "ACTIVE",
-            "version":     __version__,
+            "state": "ACTIVE",
+            "version": __version__,
             "cycle_count": self._cycle_count,
             "layers": {
                 "L-3": self.l_minus3.status(),
@@ -206,15 +124,9 @@ class HPMv5:
 if __name__ == "__main__":
     import json
     logging.basicConfig(level=logging.INFO)
-
     hpm = HPMv5()
-
-    # Run a few operational cycles
     for i in range(3):
-        report = hpm.run_cycle(
-            write_data=f"Cosmic observation epoch {i+1}".encode()
-        )
-        print(f"Cycle {report['cycle']}: Φ={report.get('phi', 'N/A'):.4f}  R={report['r_value']:.4f}")
-
+        report = hpm.run_cycle(write_data=f"Cosmic observation epoch {i+1}".encode())
+        print(f"Cycle {report['cycle']}: Phi={report.get('phi', 'N/A'):.4f}  R={report['r_value']:.4f}")
     print("\nFull system status:")
     print(json.dumps(hpm.status(), indent=2, default=str))
