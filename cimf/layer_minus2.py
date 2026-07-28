@@ -137,8 +137,15 @@ class MetaGovernanceEngine:
         )
 
     def rebalance_weights(self, new_weights: dict[str, float]) -> None:
+        # Validate against the candidate but roll back on rejection: assigning
+        # first left the engine holding invalid weights whenever this raised.
+        previous = self.weights
         self.weights = new_weights
-        self._validate_weights()
+        try:
+            self._validate_weights()
+        except ValueError:
+            self.weights = previous
+            raise
 
     def _validate_weights(self) -> None:
         total = sum(self.weights.values())
