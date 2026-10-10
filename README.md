@@ -23,6 +23,7 @@ size_categories:
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Framework: CIMF v5](https://img.shields.io/badge/Framework-CIMF%20v5-blueviolet)]()
 [![Status: Theoretical](https://img.shields.io/badge/Status-Theoretical%20Research-informational)]()
+[![CodeQL](https://github.com/kaymyg/CIMF/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaymyg/CIMF/actions/workflows/codeql.yml)
 
 ---
 
